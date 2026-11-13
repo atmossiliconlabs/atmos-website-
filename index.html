@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atmos Silicon Labs — Practical VLSI Training</title>
+<meta name="description" content="Atmos Silicon Labs runs hands-on VLSI programs for engineering colleges in India: RTL design, synthesis, static timing analysis and physical design on open-source EDA tools.">
+<meta name="theme-color" content="#0A0A0B">
+<meta property="og:site_name" content="Atmos Silicon Labs">
+<meta property="og:title" content="Atmos Silicon Labs — Practical VLSI Training">
+<meta property="og:description" content="RTL to GDSII, hands-on. VLSI programs for engineering colleges in India.">
+<meta property="og:image" content="logo-original.jpg">
+<link rel="icon" href="logo-mark-dark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Michroma&family=Inter+Tight:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1A3987; --blue-deep:#112863; --blue-glow:rgba(26,57,135,.55); --blue-tint:#EEF2FA; --blue-soft:#7D96DA;
+  --white:#FFFFFF; --off:#F6F7F9; --ink:#09090B; --ink-2:#2B2C31; --mute:#6A6E78;
+  --line:#E4E6EB; --line-d:#1F2026;
+  --head:'Inter Tight',system-ui,sans-serif; --sans:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace; --brand:'Michroma',sans-serif;
+  --max:1200px; --r:4px; --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{font-family:var(--sans);color:var(--ink);background:var(--white);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+img,svg{display:block;max-width:100%}
+a{color:inherit}
+::selection{background:var(--blue);color:#fff}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
+section{padding:120px 0;position:relative}
+h1,h2,h3,h4{font-family:var(--head);font-weight:500;letter-spacing:-.025em;line-height:1.08}
+h1{font-size:clamp(40px,6.4vw,84px);letter-spacing:-.04em;line-height:1}
+h2{font-size:clamp(32px,4.4vw,56px);letter-spacing:-.035em}
+h3{font-size:22px;letter-spacing:-.015em;line-height:1.25}
+.muted{color:var(--mute)}
+.lead{font-size:clamp(17px,1.5vw,19.5px);color:var(--ink-2);max-width:58ch;line-height:1.65}
+.dark{background:var(--ink);color:#fff}
+.dark .lead{color:rgba(255,255,255,.68)}
+.blue{background:var(--blue);color:#fff}
+.blue .lead{color:rgba(255,255,255,.78)}
+
+.label{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);display:inline-flex;gap:12px;align-items:center;font-weight:500}
+.label i{font-style:normal;color:var(--mute)}
+.dark .label,.blue .label{color:var(--blue-soft)}
+.blue .label{color:rgba(255,255,255,.7)}
+.dark .label i,.blue .label i{color:rgba(255,255,255,.4)}
+.sec-head{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end;margin-bottom:64px}
+.sec-head h2{margin-top:18px}
+@media (max-width:900px){.sec-head{grid-template-columns:1fr;gap:20px;margin-bottom:44px}section{padding:84px 0}}
+
+.btn{display:inline-flex;align-items:center;gap:12px;font-family:var(--sans);font-weight:500;font-size:15px;text-decoration:none;padding:15px 24px;border:1px solid var(--blue);background:var(--blue);color:#fff;border-radius:var(--r);cursor:pointer;transition:all .25s var(--ease)}
+.btn:hover{background:var(--blue-deep);border-color:var(--blue-deep);transform:translateY(-1px);box-shadow:0 10px 24px -10px var(--blue-glow)}
+.btn .arr{transition:transform .25s var(--ease)}.btn:hover .arr{transform:translateX(4px)}
+.btn.line{background:transparent;color:var(--ink);border-color:rgba(0,0,0,.2)}
+.btn.line:hover{border-color:var(--ink);box-shadow:none}
+.dark .btn.line,.hero .btn.line{color:#fff;border-color:rgba(255,255,255,.25)}
+.dark .btn.line:hover,.hero .btn.line:hover{border-color:#fff;background:transparent}
+.btn.white{background:#fff;color:var(--blue);border-color:#fff}
+.btn.white:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* placeholders */
+.tbd{background:repeating-linear-gradient(135deg,rgba(26,57,135,.08) 0 6px,transparent 6px 12px);outline:1px dashed #8C9BC4;outline-offset:2px;padding:0 3px}
+.tbd::after{content:"TBD";font-family:var(--mono);font-size:9px;letter-spacing:.1em;vertical-align:super;margin-left:4px;color:#8C9BC4}
+.dark .tbd,.blue .tbd{background:repeating-linear-gradient(135deg,rgba(255,255,255,.08) 0 6px,transparent 6px 12px);outline-color:rgba(255,255,255,.35)}
+body.clean .tbd{background:none;outline:none;padding:0}
+body.clean .tbd::after{display:none}
+.prod .tbd{display:none!important}
+.proto{position:fixed;right:16px;bottom:16px;z-index:60;font-family:var(--mono);font-size:11.5px;background:rgba(9,9,11,.92);color:#fff;padding:7px 8px 7px 14px;border-radius:99px;display:flex;gap:10px;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,.25);border:1px solid #2a2a30}
+.proto button{font:inherit;background:#fff;color:var(--ink);border:none;padding:4px 10px;cursor:pointer;border-radius:99px}
+
+/* header */
+header{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .35s,border-color .35s,color .35s;border-bottom:1px solid transparent;color:#fff}
+header.solid{background:rgba(255,255,255,.88);backdrop-filter:saturate(1.6) blur(14px);-webkit-backdrop-filter:saturate(1.6) blur(14px);border-color:var(--line);color:var(--ink)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:76px}
+.brand{display:flex;align-items:center;gap:13px;text-decoration:none}
+.brand img{height:30px;width:auto}
+.brand .lt{display:none}
+header:not(.solid) .brand .dk{display:none}
+header:not(.solid) .brand .lt{display:block}
+.brand span{font-family:var(--brand);font-size:11.5px;letter-spacing:.34em;line-height:1.35}
+.brand small{display:block;font-size:7.5px;letter-spacing:.5em;opacity:.6}
+.links{display:flex;gap:34px;align-items:center;list-style:none}
+.links a{text-decoration:none;font-size:14.5px;opacity:.78;transition:opacity .2s}
+.links a:hover{opacity:1}
+.links .btn{opacity:1;padding:11px 18px;font-size:14px;color:#fff}
+.menu-btn{display:none;background:none;border:1px solid currentColor;color:inherit;width:44px;height:44px;cursor:pointer;border-radius:var(--r)}
+.menu-btn i{display:block;width:18px;height:1.5px;background:currentColor;margin:4px auto}
+@media (max-width:940px){
+  .menu-btn{display:block}
+  .links{position:absolute;top:76px;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:#fff;color:var(--ink);border-bottom:1px solid var(--line);display:none}
+  .links.open{display:flex}
+  .links li{border-top:1px solid var(--line)}
+  .links a{display:block;padding:17px 28px;opacity:1}
+  .links .btn{margin:16px 28px;justify-content:center}
+}
+
+/* hero */
+.hero{background:var(--ink);color:#fff;padding:168px 0 0;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse 80% 70% at 70% 40%,#000 30%,transparent 75%);mask-image:radial-gradient(ellipse 80% 70% at 70% 40%,#000 30%,transparent 75%)}
+.hero::after{content:"";position:absolute;width:720px;height:720px;right:-120px;top:40px;background:radial-gradient(circle,rgba(26,57,135,.55),transparent 62%);filter:blur(10px);pointer-events:none}
+.hero .wrap{position:relative;z-index:1}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04);padding:7px 14px 7px 8px;border-radius:99px;text-decoration:none;color:rgba(255,255,255,.85)}
+.pill b{background:var(--blue);color:#fff;font-weight:500;padding:3px 9px;border-radius:99px}
+.hero h1{margin:28px 0 28px}
+.hero h1 span{background:linear-gradient(100deg,#fff 0%,#9FB4EA 60%,#5C7BD0 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lead{color:rgba(255,255,255,.66)}
+.ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:40px}
+.die-card{background:linear-gradient(180deg,#111217,#0B0C10);border:1px solid #23252D;border-radius:10px;padding:18px;box-shadow:0 40px 80px -30px rgba(0,0,0,.8),0 0 0 1px rgba(26,57,135,.25) inset}
+.die-meta{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;color:#7C7F8A;margin-bottom:14px;letter-spacing:.04em}
+.die-meta b{color:#fff;font-weight:500}
+.die-meta .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#5C7BD0;margin-right:8px;box-shadow:0 0 10px #5C7BD0;animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.35}}
+#die{width:100%;height:auto;aspect-ratio:1}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);margin-top:110px;border-top:1px solid rgba(255,255,255,.1)}
+.stats div{padding:34px 24px 40px 0;border-right:1px solid rgba(255,255,255,.08)}
+.stats div:not(:first-child){padding-left:28px}
+.stats div:last-child{border-right:none}
+.stats b{display:block;font-family:var(--head);font-weight:500;font-size:clamp(30px,3.4vw,44px);letter-spacing:-.04em;line-height:1}
+.stats b em{font-style:normal;color:var(--blue-soft)}
+.stats span{display:block;margin-top:10px;font-size:14px;color:rgba(255,255,255,.55)}
+@media (max-width:940px){.hero{padding-top:130px}.hero-grid{grid-template-columns:1fr;gap:48px}.stats{grid-template-columns:1fr 1fr;margin-top:64px}.stats div{padding:24px 16px 26px 0!important;border-right:none;border-bottom:1px solid rgba(255,255,255,.08)}.stats div:nth-child(even){padding-left:16px!important;border-left:1px solid rgba(255,255,255,.08)}}
+
+/* tools marquee */
+.marquee{background:var(--ink);border-top:1px solid var(--line-d);color:rgba(255,255,255,.5);overflow:hidden;padding:22px 0}
+.mq-track{display:flex;gap:56px;width:max-content;animation:mq 38s linear infinite;font-family:var(--mono);font-size:13.5px;letter-spacing:.06em;white-space:nowrap}
+.mq-track span{display:flex;align-items:center;gap:56px}
+.mq-track span::after{content:"";width:5px;height:5px;background:var(--blue-soft);transform:rotate(45deg)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* programs */
+.progs{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.prog{border:1px solid var(--line);border-radius:10px;padding:44px 40px 40px;display:flex;flex-direction:column;position:relative;overflow:hidden;transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.prog:hover{transform:translateY(-4px);box-shadow:0 30px 60px -30px rgba(9,9,11,.25)}
+.prog.ink{background:var(--ink);color:#fff;border-color:var(--ink)}
+.prog.ink::before{content:"";position:absolute;width:420px;height:420px;right:-160px;top:-160px;background:radial-gradient(circle,rgba(26,57,135,.7),transparent 65%)}
+.prog>*{position:relative}
+.prog .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:38px}
+.prog .kind{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);font-weight:500}
+.prog.ink .kind{color:var(--blue-soft)}
+.prog .badge{font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:4px 10px;border-radius:99px;color:var(--mute)}
+.prog.ink .badge{border-color:rgba(255,255,255,.18);color:rgba(255,255,255,.7)}
+.prog h3{font-size:clamp(26px,2.6vw,34px);letter-spacing:-.03em;line-height:1.1;margin-bottom:18px}
+.prog>p{color:var(--ink-2);font-size:16px;max-width:46ch}
+.prog.ink>p{color:rgba(255,255,255,.66)}
+.facts{display:grid;grid-template-columns:1fr 1fr;margin:34px 0 30px;border-top:1px solid var(--line)}
+.prog.ink .facts{border-color:rgba(255,255,255,.12)}
+.facts div{padding:16px 0;border-bottom:1px solid var(--line)}
+.prog.ink .facts div{border-color:rgba(255,255,255,.12)}
+.facts div:nth-child(odd){padding-right:16px}
+.facts span{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-bottom:4px}
+.prog.ink .facts span{color:rgba(255,255,255,.45)}
+.facts b{font-weight:500;font-size:15.5px}
+.covers{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:36px}
+.covers span{font-size:13.5px;padding:6px 12px;border-radius:99px;background:var(--off);border:1px solid var(--line)}
+.prog.ink .covers span{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12);color:rgba(255,255,255,.85)}
+.prog .foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.prog .foot small{font-size:13.5px;color:var(--mute)}
+.prog.ink .foot small{color:rgba(255,255,255,.5)}
+.prog.ink .btn{background:#fff;color:var(--ink);border-color:#fff}
+.prog.ink .btn:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
+.syllabus-note{margin-top:28px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding:22px 28px;border-radius:10px;background:var(--blue-tint);font-size:15.5px}
+.syllabus-note a{font-weight:500;color:var(--blue);text-decoration:none;white-space:nowrap}
+.syllabus-note a:hover{text-decoration:underline}
+@media (max-width:940px){.progs{grid-template-columns:1fr}.prog{padding:34px 26px 30px}}
+
+/* capstone */
+.capstone{margin-top:24px;border:1px solid var(--line);border-radius:10px;display:grid;grid-template-columns:.9fr 1.1fr;overflow:hidden}
+.capstone .txt{padding:40px}
+.capstone .txt h3{font-size:26px;margin:14px 0 12px;letter-spacing:-.025em}
+.capstone .txt p{color:var(--ink-2);font-size:15.5px}
+.cap-flow{background:var(--off);border-left:1px solid var(--line);padding:40px;display:flex;align-items:center}
+.cap-flow ol{list-style:none;display:grid;grid-template-columns:repeat(6,1fr);width:100%;counter-reset:s;position:relative}
+.cap-flow ol::before{content:"";position:absolute;left:8%;right:8%;top:22px;height:1px;background:linear-gradient(90deg,var(--blue),var(--ink))}
+.cap-flow li{text-align:center;font-size:13px;color:var(--ink-2);position:relative;counter-increment:s}
+.cap-flow li::before{content:counter(s,decimal-leading-zero);display:grid;place-items:center;width:44px;height:44px;margin:0 auto 12px;border-radius:50%;background:#fff;border:1px solid var(--blue);font-family:var(--mono);font-size:12px;color:var(--blue);position:relative}
+.cap-flow li:last-child::before{background:var(--blue);color:#fff}
+@media (max-width:940px){.capstone{grid-template-columns:1fr}.capstone .txt{padding:30px 26px}.cap-flow{border-left:none;border-top:1px solid var(--line);padding:30px 18px}.cap-flow li{font-size:11.5px}.cap-flow li::before{width:36px;height:36px;font-size:11px}.cap-flow ol::before{top:18px}}
+
+/* flow explorer */
+#flow{overflow:hidden}
+#flow::before{content:"";position:absolute;width:800px;height:800px;left:-300px;bottom:-400px;background:radial-gradient(circle,rgba(26,57,135,.45),transparent 65%)}
+.explorer{border:1px solid var(--line-d);border-radius:10px;overflow:hidden;background:rgba(255,255,255,.015);position:relative}
+.steps{display:flex;overflow-x:auto;border-bottom:1px solid var(--line-d);scrollbar-width:none}
+.steps::-webkit-scrollbar{display:none}
+.steps button{flex:1 0 auto;min-width:108px;background:none;border:none;border-right:1px solid var(--line-d);color:rgba(255,255,255,.5);font-family:var(--mono);font-size:12.5px;padding:18px 16px;text-align:left;cursor:pointer;transition:all .25s;position:relative}
+.steps button:last-child{border-right:none}
+.steps button small{display:block;font-size:10.5px;opacity:.6;margin-bottom:4px}
+.steps button:hover{color:#fff;background:rgba(255,255,255,.03)}
+.steps button[aria-selected=true]{color:#fff;background:rgba(26,57,135,.35)}
+.steps button[aria-selected=true]::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--blue-soft)}
+.panel{display:grid;grid-template-columns:1.25fr 1fr;gap:56px;padding:48px}
+.panel h3{font-size:30px;letter-spacing:-.03em;margin-bottom:14px}
+.panel p{color:rgba(255,255,255,.66)}
+.panel ul{list-style:none;margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+.panel li{padding:12px 0;border-top:1px solid var(--line-d);font-size:15px;color:rgba(255,255,255,.88)}
+.tools h4{font-family:var(--mono);font-weight:400;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:30px}
+.chips span{font-family:var(--mono);font-size:12.5px;border:1px solid #30323a;padding:7px 12px;border-radius:99px;color:#E6E7EA}
+.chips.on span{background:var(--blue);border-color:var(--blue)}
+.panel-anim{animation:fade .45s var(--ease)}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}}
+@media (max-width:940px){.panel{grid-template-columns:1fr;padding:30px 24px;gap:30px}.panel ul{grid-template-columns:1fr}}
+
+/* why */
+.why{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink)}
+.why div{padding:34px 28px 10px 0}
+.why div+div{padding-left:28px;border-left:1px solid var(--line)}
+.why b{font-family:var(--head);font-weight:500;font-size:54px;letter-spacing:-.05em;line-height:1;color:var(--blue);display:block}
+.why h3{font-size:19px;margin:22px 0 10px}
+.why p{font-size:15px;color:var(--ink-2)}
+@media (max-width:940px){.why{grid-template-columns:1fr 1fr}.why div{padding:30px 18px 26px 0!important;border-left:none!important;border-bottom:1px solid var(--line)}.why div:nth-child(even){padding-left:18px!important;border-left:1px solid var(--line)!important}}
+@media (max-width:560px){.why{grid-template-columns:1fr}.why div:nth-child(even){padding-left:0!important;border-left:none!important}}
+
+/* colleges */
+#colleges{overflow:hidden}
+#colleges::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:linear-gradient(180deg,transparent,#000 60%);mask-image:linear-gradient(180deg,transparent,#000 60%);pointer-events:none}
+#colleges .wrap{position:relative;z-index:1}
+.process{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;counter-reset:p}
+.process div{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:30px 26px 32px;backdrop-filter:blur(4px)}
+.process div::before{counter-increment:p;content:counter(p,decimal-leading-zero);font-family:var(--mono);font-size:12px;color:rgba(255,255,255,.55);display:block;margin-bottom:46px}
+.process h3{font-size:20px;margin-bottom:10px}
+.process p{font-size:15px;color:rgba(255,255,255,.72)}
+.req{margin-top:56px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;padding-top:44px;border-top:1px solid rgba(255,255,255,.18)}
+.req ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:12px 28px}
+.req li{font-size:15px;color:rgba(255,255,255,.85);padding-left:22px;position:relative}
+.req li::before{content:"";position:absolute;left:0;top:9px;width:8px;height:8px;border:1.5px solid #fff;transform:rotate(45deg)}
+@media (max-width:940px){.process{grid-template-columns:1fr 1fr}.req{grid-template-columns:1fr;gap:28px}}
+@media (max-width:560px){.process{grid-template-columns:1fr}.req ul{grid-template-columns:1fr}}
+
+/* team */
+.team{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.person{border-radius:10px;overflow:hidden;border:1px solid var(--line);transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.person:hover{transform:translateY(-4px);box-shadow:0 30px 60px -34px rgba(9,9,11,.3)}
+.avatar{aspect-ratio:4/3;background:var(--ink);position:relative;display:grid;place-items:center;overflow:hidden}
+.avatar::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px}
+.avatar::after{content:"";position:absolute;width:300px;height:300px;bottom:-150px;right:-100px;background:radial-gradient(circle,rgba(26,57,135,.8),transparent 65%)}
+.avatar span{position:relative;z-index:1;font-family:var(--head);font-size:56px;font-weight:500;color:#fff;letter-spacing:-.04em}
+.avatar small{position:absolute;z-index:1;top:14px;right:14px;font-family:var(--mono);font-size:10.5px;color:rgba(255,255,255,.55)}
+.person .t{padding:24px 26px 28px}
+.person h3{font-size:21px}
+.person .role{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--blue);margin:6px 0 12px;text-transform:uppercase}
+.person p{font-size:15px;color:var(--ink-2)}
+@media (max-width:940px){.team{grid-template-columns:1fr}.avatar{aspect-ratio:16/7}}
+
+/* faq */
+.faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px}
+details{border-bottom:1px solid var(--line)}
+details:first-child{border-top:1px solid var(--line)}
+summary{list-style:none;cursor:pointer;padding:24px 0;display:flex;justify-content:space-between;align-items:center;gap:20px;font-family:var(--head);font-weight:500;font-size:19px;letter-spacing:-.015em}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";flex:none;width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:linear-gradient(var(--blue),var(--blue)) center/10px 1.5px no-repeat,linear-gradient(var(--blue),var(--blue)) center/1.5px 10px no-repeat;transition:transform .3s var(--ease)}
+details[open] summary::after{transform:rotate(45deg)}
+details p{padding:0 0 26px;color:var(--ink-2);font-size:15.5px;max-width:62ch}
+@media (max-width:940px){.faq-grid{grid-template-columns:1fr;gap:20px}}
+
+/* contact */
+#contact{overflow:hidden}
+#contact::before{content:"";position:absolute;width:760px;height:760px;right:-260px;top:-260px;background:radial-gradient(circle,rgba(26,57,135,.5),transparent 65%)}
+.contact-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:72px;position:relative}
+.clist{list-style:none;margin-top:44px}
+.clist li{display:grid;grid-template-columns:100px 1fr;gap:12px;padding:18px 0;border-top:1px solid var(--line-d);font-size:16px}
+.clist li>span{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.4);padding-top:4px}
+.clist a{text-decoration:none;transition:color .2s}.clist a:hover{color:var(--blue-soft)}
+.form-card{background:#fff;color:var(--ink);border-radius:12px;padding:40px;box-shadow:0 40px 80px -40px rgba(0,0,0,.6)}
+.form-card h3{font-size:24px;margin-bottom:6px}
+.form-card>p{color:var(--mute);font-size:15px;margin-bottom:28px}
+form{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label{display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:500;color:var(--ink-2)}
+.full{grid-column:1/-1}
+input,select,textarea{font:inherit;font-size:15.5px;font-weight:400;background:var(--off);border:1px solid var(--line);color:var(--ink);padding:13px 14px;border-radius:var(--r);transition:border-color .2s,box-shadow .2s,background .2s}
+input:focus,select:focus,textarea:focus{outline:none;background:#fff;border-color:var(--blue);box-shadow:0 0 0 4px rgba(26,57,135,.12)}
+textarea{min-height:120px;resize:vertical}
+.form-note{font-size:14px;color:var(--mute)}
+@media (max-width:940px){.contact-grid{grid-template-columns:1fr;gap:48px}.form-card{padding:28px 22px}}
+@media (max-width:560px){form{grid-template-columns:1fr}}
+
+footer{background:var(--ink);color:rgba(255,255,255,.5);padding:72px 0 96px;font-size:14px;border-top:1px solid var(--line-d)}
+.foot{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px}
+.foot img{height:64px;width:auto;margin-bottom:18px}
+.foot h4{font-family:var(--mono);font-weight:400;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:16px}
+.foot ul{list-style:none;display:grid;gap:10px}
+.foot a{text-decoration:none;color:rgba(255,255,255,.72)}.foot a:hover{color:#fff}
+.legal{grid-column:1/-1;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-top:28px;margin-top:24px;border-top:1px solid var(--line-d);font-family:var(--mono);font-size:12px}
+@media (max-width:840px){.foot{grid-template-columns:1fr 1fr}.foot>div:first-child{grid-column:1/-1}}
+
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.mq-track{animation:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body class="prod">
+
+<header id="hdr">
+  <nav class="wrap nav" aria-label="Main">
+    <a class="brand" href="#top" aria-label="Atmos Silicon Labs home">
+      <img class="lt" src="logo-mark-light.png" alt="">
+      <img class="dk" src="logo-mark-dark.png" alt="">
+      <span>ATMOS<small>SILICON LABS</small></span>
+    </a>
+    <button class="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="links"><i></i><i></i><i></i></button>
+    <ul class="links" id="links">
+      <li><a href="#programs">Programs</a></li>
+      <li><a href="#flow">Curriculum</a></li>
+      <li><a href="#colleges">For colleges</a></li>
+      <li><a href="#team">Team</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a class="btn" href="#contact">Get in touch <span class="arr">→</span></a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <a class="pill reveal" href="#programs"><b>2027</b>Now enrolling partner colleges for January →</a>
+        <h1 class="reveal d1">Learn chip design the way it's <span>actually done.</span></h1>
+        <p class="lead reveal d2">Atmos Silicon Labs brings hands-on VLSI training to engineering colleges, covering RTL design, synthesis, timing analysis and physical design. Every program is built on open-source EDA tools and taught by engineers who do this work.</p>
+        <div class="ctas reveal d3">
+          <a class="btn" href="#programs">Explore programs <span class="arr">→</span></a>
+          <a class="btn line" href="#colleges">Partner with us</a>
+        </div>
+      </div>
+      <div class="die-card reveal d2" aria-hidden="true">
+        <div class="die-meta"><span id="die-phase"><i class="dot"></i><b>alu_4bit</b> · placement</span><span id="die-stage">cells: 0</span></div>
+        <svg id="die" viewBox="0 0 400 400"></svg>
+      </div>
+    </div>
+    <div class="stats">
+      <div><b>RTL<em>→</em>GDSII</b><span>The complete ASIC flow</span></div>
+      <div><b>75<em>%</em></b><span>Hands-on, lab-first learning</span></div>
+      <div><b>10<em>+</em></b><span>Open-source EDA tools</span></div>
+      <div><b>2024</b><span>Founded in Hyderabad</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee" aria-label="Tools students work with">
+  <div class="mq-track">
+    <span>Icarus Verilog</span><span>GTKWave</span><span>Yosys</span><span>OpenSTA</span><span>OpenTimer</span><span>OpenROAD</span><span>OpenLane</span><span>Magic</span><span>KLayout</span><span>Netgen</span><span>Ubuntu Linux</span>
+    <span>Icarus Verilog</span><span>GTKWave</span><span>Yosys</span><span>OpenSTA</span><span>OpenTimer</span><span>OpenROAD</span><span>OpenLane</span><span>Magic</span><span>KLayout</span><span>Netgen</span><span>Ubuntu Linux</span>
+  </div>
+</div>
+
+<!-- PROGRAMS -->
+<section id="programs">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="reveal"><span class="label">01 <i>/</i> Programs</span><h2>Two programs.<br>One complete flow.</h2></div>
+      <p class="lead reveal d1">Start with an intensive workshop that shows students the entire back-end flow, or go deeper with a skill development program where they build a design from RTL to layout themselves.</p>
+    </div>
+
+    <div class="progs">
+      <article class="prog reveal" id="workshop">
+        <div class="top"><span class="kind">Workshop</span><span class="badge">Online · Live</span></div>
+        <h3>From Silicon Blueprint to Timing Closure</h3>
+        <p>An intensive introduction to VLSI physical design that takes students through the RTL-to-GDSII flow, with live tool demonstrations at every stage.</p>
+        <div class="facts">
+          <div><span>Fee</span><b>₹1,500 per student</b></div>
+          <div><span>Duration</span><b>18 instructional hours</b></div>
+          <div><span>For</span><b>B.Tech (II yr+) & M.Tech, ECE</b></div>
+          <div><span>Prerequisites</span><b>None</b></div>
+        </div>
+        <div class="covers"><span>ASIC design flow</span><span>Verilog RTL</span><span>Linux for VLSI</span><span>Logic synthesis</span><span>Static timing analysis</span><span>Floorplan → Route</span><span>Timing closure</span></div>
+        <div class="foot">
+          <a class="btn" href="#contact" data-topic="Workshop: From Silicon Blueprint to Timing Closure">Book for your college <span class="arr">→</span></a>
+          <small>Certificate included</small>
+        </div>
+      </article>
+
+      <article class="prog ink reveal d1" id="sdp">
+        <div class="top"><span class="kind">Skill Development Program</span><span class="badge">Campus · Online · Hybrid</span></div>
+        <h3>Front-End & Back-End VLSI Design</h3>
+        <p>A practical-first program on open-source EDA tools. Students write, verify, synthesise and physically implement a real design, then present it.</p>
+        <div class="facts">
+          <div><span>Fee</span><b>On request</b></div>
+          <div><span>Duration</span><b>40 hours · 75% hands-on</b></div>
+          <div><span>For</span><b>B.E./B.Tech III & IV yr</b></div>
+          <div><span>Outcome</span><b>Assessed mini-project</b></div>
+        </div>
+        <div class="covers"><span>Digital design</span><span>Verilog & testbenches</span><span>Simulation & debug</span><span>Yosys synthesis</span><span>OpenSTA</span><span>Floorplan & power</span><span>Placement · CTS · Routing</span><span>DRC / LVS concepts</span></div>
+        <div class="foot">
+          <a class="btn" href="#contact" data-topic="Skill Development Program (40 hours)">Request a proposal <span class="arr">→</span></a>
+          <small>Certificate of Completion</small>
+        </div>
+      </article>
+    </div>
+
+    <div class="capstone reveal">
+      <div class="txt">
+        <span class="label">Capstone project</span>
+        <h3>A 4-bit ALU, from RTL to layout.</h3>
+        <p>Students in the skill development program design an ALU in Verilog, verify it, synthesise it and take it through physical implementation. Then they present their results, the same story they'll tell in a technical interview.</p>
+      </div>
+      <div class="cap-flow">
+        <ol><li>RTL</li><li>Verify</li><li>Synth</li><li>STA</li><li>PnR</li><li>Present</li></ol>
+      </div>
+    </div>
+
+    <div class="syllabus-note reveal">
+      <span>Detailed syllabus and delivery plans are shared with institutions on request.</span>
+      <a href="#contact" data-topic="Syllabus request">Request the syllabus →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FLOW -->
+<section id="flow" class="dark">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="reveal"><span class="label">02 <i>/</i> Curriculum</span><h2>Every stage,<br>from RTL to layout.</h2></div>
+      <p class="lead reveal d1">Most courses stop at Verilog. Ours follow one design through the whole flow that industry teams use. Pick a stage to see what's covered.</p>
+    </div>
+    <div class="explorer reveal">
+      <div class="steps" role="tablist" aria-label="Design flow stages" id="steps"></div>
+      <div class="panel" role="tabpanel" id="panel" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="reveal"><span class="label">03 <i>/</i> Why Atmos</span><h2>Built by engineers who close timing for a living.</h2></div>
+    </div>
+    <div class="why reveal">
+      <div><b>75%</b><h3>Practical first</h3><p>Most of the program is hands-on. Concepts come in short briefings tied directly to the exercise in front of the student.</p></div>
+      <div><b>₹0</b><h3>No licence barrier</h3><p>Everything runs on open-source tools on Linux, so students can keep practising on their own machines after the program ends.</p></div>
+      <div><b>3</b><h3>Industry trainers</h3><p>An RTL and back-end instructor, a back-end design lead and an STA lead: practitioners, not lecturers.</p></div>
+      <div><b>1</b><h3>A project to show</h3><p>Every student takes a real design from RTL to layout and learns to explain it, which is exactly what interviewers ask about.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- COLLEGES -->
+<section id="colleges" class="blue">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="reveal"><span class="label">04 <i>/</i> For colleges</span><h2>A partnership,<br>not a one-off session.</h2></div>
+      <div class="reveal d1"><p class="lead">We work with ECE, EEE and EIE departments under a Memorandum of Understanding, building lasting skills in your students instead of a single visit.</p>
+      <p style="margin-top:28px"><a class="btn white" href="#contact" data-topic="College partnership (MoU)">Start a partnership <span class="arr">→</span></a></p></div>
+    </div>
+    <div class="process reveal">
+      <div><h3>Connect</h3><p>Tell us about your department, your students and what you want them to learn.</p></div>
+      <div><h3>Proposal & MoU</h3><p>We send a tailored proposal and formalise the collaboration through an MoU.</p></div>
+      <div><h3>Lab readiness</h3><p>We help you set up a Linux environment with the agreed open-source tools.</p></div>
+      <div><h3>Deliver & certify</h3><p>Training, lab support, assessment and certificates, co-branded with your college if you like.</p></div>
+    </div>
+    <div class="req reveal">
+      <div><span class="label">What we take care of</span><h3 style="font-size:26px;margin-top:14px;letter-spacing:-.025em">Content, instruction, labs and evaluation, end to end.</h3></div>
+      <ul>
+        <li>Training content and lab exercises</li>
+        <li>Live demonstrations and guidance</li>
+        <li>Assignments and project reviews</li>
+        <li>Technical assessment</li>
+        <li>Certificates for eligible students</li>
+        <li>On-campus, online or hybrid delivery</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="reveal"><span class="label">05 <i>/</i> Team</span><h2>The people who teach.</h2></div>
+      <p class="lead reveal d1">Atmos Silicon Labs Pvt. Ltd. was founded in Hyderabad in 2024. We start with education because strong engineers come first. From there, we're building toward our own IP and silicon.</p>
+    </div>
+    <div class="team">
+      <div class="person reveal"><div class="avatar"><span>LD</span><small class="tbd">photo</small></div><div class="t"><h3>Luke Daniel</h3><p class="role">Technical Instructor</p><p>RTL programming and VLSI back-end design.</p></div></div>
+      <div class="person reveal d1"><div class="avatar"><span>VS</span><small class="tbd">photo</small></div><div class="t"><h3>Venkat Sai</h3><p class="role">Back-End Design Lead</p><p>Physical design implementation.</p></div></div>
+      <div class="person reveal d2"><div class="avatar"><span>SS</span><small class="tbd">photo</small></div><div class="t"><h3>Satya Sharma</h3><p class="role">STA Lead Engineer</p><p>Physical design implementation and static timing analysis.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="background:var(--off)">
+  <div class="wrap faq-grid">
+    <div class="reveal"><span class="label">06 <i>/</i> FAQ</span><h2 style="margin-top:18px">Questions,<br>answered.</h2></div>
+    <div class="reveal d1">
+      <details><summary>Can individual students enrol?</summary><p>Our programs currently run through partner colleges. If you're a student, ask your department to contact us, or send an enquiry and we'll let you know when open batches launch.</p></details>
+      <details><summary>Do students need prior VLSI experience?</summary><p>The workshop has no prerequisites. The skill development program assumes basic digital electronics, and we review the fundamentals before any tool work begins.</p></details>
+      <details><summary>Which tools are used? Are licences needed?</summary><p>Icarus Verilog, GTKWave, Yosys, OpenSTA, OpenTimer, OpenROAD and OpenLane, with Magic, KLayout and Netgen for physical verification, all on Linux. All are open source, so no licences are required.</p></details>
+      <details><summary>What infrastructure does a college need?</summary><p>A computer per student is preferred, running Ubuntu Linux with 16 GB RAM, a modern multi-core processor and 50–100 GB of free storage. For online sessions, students need a stable connection and a headset with a microphone.</p></details>
+      <details><summary>Do students receive a certificate?</summary><p>Yes. Certificates are issued by Atmos Silicon Labs Pvt. Ltd. and can be co-branded with your institution.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="dark">
+  <div class="wrap contact-grid">
+    <div>
+      <span class="label reveal">07 <i>/</i> Contact</span>
+      <h2 class="reveal d1" style="margin-top:18px">Let's build your<br>VLSI program.</h2>
+      <p class="lead reveal d2" style="margin-top:20px">Tell us about your department and students, and we'll come back with a proposal that fits.</p>
+      <ul class="clist reveal d3">
+        <li><span>Email</span><a href="mailto:info@atmossiliconlabs.com">info@atmossiliconlabs.com</a></li>
+        <li><span>Phone</span><a href="tel:+918328635592">+91 83286 35592</a></li>
+        <li><span>LinkedIn</span><a href="https://www.linkedin.com/in/atmos-silicon-labs-7862612b1" target="_blank" rel="noopener">Atmos Silicon Labs ↗</a></li>
+        <li><span>Office</span><div>Hyderabad, Telangana, India <span class="tbd">full address</span></div></li>
+      </ul>
+    </div>
+    <div class="form-card reveal d1">
+      <h3>Send an enquiry</h3>
+      <p>We usually reply within one working day. <span class="tbd">confirm</span></p>
+      <form id="enquiry" novalidate>
+        <label>Full name<input name="name" required autocomplete="name"></label>
+        <label>Email<input name="email" type="email" required autocomplete="email"></label>
+        <label>Phone<input name="phone" type="tel" autocomplete="tel"></label>
+        <label>College / organisation<input name="org" autocomplete="organization"></label>
+        <label class="full">Interested in
+          <select name="topic" id="topic">
+            <option>Workshop: From Silicon Blueprint to Timing Closure</option>
+            <option>Skill Development Program (40 hours)</option>
+            <option>College partnership (MoU)</option>
+            <option>Syllabus request</option>
+            <option>Something else</option>
+          </select>
+        </label>
+        <label class="full">Message<textarea name="message" required placeholder="Your department, number of students, and anything else we should know"></textarea></label>
+        <div class="full" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:4px">
+          <button class="btn" type="submit">Send enquiry <span class="arr">→</span></button>
+          <span class="form-note" id="form-note"></span>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <img src="logo-lockup-light.png" alt="Atmos Silicon Labs">
+      <p style="max-width:32ch">Practical VLSI education, on the path toward IP and silicon.</p>
+    </div>
+    <div><h4>Programs</h4><ul><li><a href="#workshop">Workshop</a></li><li><a href="#sdp">Skill Development</a></li><li><a href="#flow">Curriculum</a></li></ul></div>
+    <div><h4>Company</h4><ul><li><a href="#colleges">For colleges</a></li><li><a href="#team">Team</a></li><li><a href="#faq">FAQ</a></li></ul></div>
+    <div><h4>Contact</h4><ul><li><a href="mailto:info@atmossiliconlabs.com">Email</a></li><li><a href="tel:+918328635592">+91 83286 35592</a></li><li><a href="https://www.linkedin.com/in/atmos-silicon-labs-7862612b1" target="_blank" rel="noopener">LinkedIn ↗</a></li></ul></div>
+    <div class="legal">
+      <span>© <span id="yr">2026</span> Atmos Silicon Labs Pvt. Ltd. All rights reserved.</span>
+      <span>Hyderabad, India</span>
+    </div>
+  </div>
+</footer>
+
+
+
+<script>
+// header state
+const hdr=document.getElementById('hdr'),hero=document.getElementById('hero');
+new IntersectionObserver(([e])=>hdr.classList.toggle('solid',!e.isIntersecting),{rootMargin:'-76px 0px 0px 0px',threshold:0}).observe(hero);
+// mobile nav
+const menuBtn=document.querySelector('.menu-btn'),links=document.getElementById('links');
+menuBtn.addEventListener('click',()=>{const o=links.classList.toggle('open');menuBtn.setAttribute('aria-expanded',o);if(o)hdr.classList.add('solid')});
+links.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{links.classList.remove('open');menuBtn.setAttribute('aria-expanded',false)}));
+// TBD toggle
+document.getElementById('yr').textContent=new Date().getFullYear();
+// reveal
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// curriculum explorer
+const W='Workshop',P='Skill Development';
+const FLOW=[
+ {k:'Linux',t:'Linux for VLSI',d:'Every EDA flow runs on Linux. Students learn to work the way engineers do: in a terminal, with scripts.',l:['File system and permissions','Essential commands for EDA','Shell usage and process control','Navigating tool environments'],o:['Ubuntu','Bash'],c:[W,P]},
+ {k:'RTL',t:'RTL design',d:'Synthesisable Verilog, from logic gates and multiplexers to counters, FSMs and an ALU.',l:['Modules, ports and data types','Combinational and sequential RTL','Finite state machines','Coding for synthesis'],o:['Icarus Verilog'],c:[W,P]},
+ {k:'Verify',t:'Simulation and debug',d:'Prove the design works before it goes anywhere near synthesis.',l:['Testbench structure','Stimulus and expected results','Waveform analysis','Debugging mismatches'],o:['Icarus Verilog','GTKWave'],c:[W,P]},
+ {k:'Synthesis',t:'Logic synthesis',d:'Map RTL onto standard cells, then learn to read what the netlist and reports are telling you.',l:['RTL-to-gate flow','Technology mapping','Netlist inspection','Area and cell reports'],o:['Yosys'],c:[W,P]},
+ {k:'STA',t:'Static timing analysis',d:'Why a design meets or misses timing, and how to read the report that tells you.',l:['Clocks and timing paths','SDC constraints','Setup, hold and slack','Timing report walkthroughs'],o:['OpenSTA','OpenTimer'],c:[W,P]},
+ {k:'Floorplan',t:'Floorplan and power',d:'Set up the physical canvas: the die, the core, the pins and the power grid.',l:['Die, core and utilisation','Pins, macros and blockages','Rings, stripes and grids','LEF, libs and constraints'],o:['OpenROAD','OpenLane'],c:[W,P]},
+ {k:'Placement',t:'Placement',d:'Place standard cells for timing and routability, then check the quality of the result.',l:['Global and detailed placement','Placement optimisation','Congestion analysis','Placement reports'],o:['OpenROAD'],c:[W,P]},
+ {k:'CTS',t:'Clock tree synthesis',d:'Build a clock network on a real sequential design and measure how well it performs.',l:['CTS prerequisites','Latency and skew','Running CTS','Clock-tree reports'],o:['OpenROAD'],c:[W,P]},
+ {k:'Routing',t:'Routing and closure',d:'Connect the design on metal and check timing after routing.',l:['Global and detailed routing','Routing resources','Post-route timing','Timing closure strategies'],o:['OpenROAD','OpenLane'],c:[W,P]},
+ {k:'Signoff',t:'Physical verification and signoff',d:'Check the layout is clean and manufacturable, sign off timing on the extracted design, then present the result.',l:['DRC with Magic and KLayout','LVS with Netgen','Parasitic extraction (OpenRCX)','Signoff STA and QoR review','GDSII streaming and layout review','Mini-project and presentation'],o:['Magic','KLayout','Netgen','OpenRCX','OpenSTA','OpenLane'],c:[P]}
+];
+const steps=document.getElementById('steps'),panel=document.getElementById('panel');
+FLOW.forEach((s,i)=>{const b=document.createElement('button');b.setAttribute('role','tab');b.innerHTML=`<small>${String(i+1).padStart(2,'0')}</small>${s.k}`;b.onclick=()=>show(i);steps.appendChild(b)});
+function show(i){const s=FLOW[i];[...steps.children].forEach((b,j)=>b.setAttribute('aria-selected',j===i));
+  panel.innerHTML=`<div class="panel-anim"><h3>${s.t}</h3><p>${s.d}</p><ul>${s.l.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+  <div class="tools panel-anim"><h4>Tools</h4><div class="chips">${s.o.map(x=>`<span>${x}</span>`).join('')}</div>
+  <h4>Covered in</h4><div class="chips on">${s.c.map(x=>`<span>${x}</span>`).join('')}</div></div>`}
+show(0);
+
+// die animation (continuous loop)
+(function(){
+  const svg=document.getElementById('die'),NS='http://www.w3.org/2000/svg',stage=document.getElementById('die-stage'),phase=document.getElementById('die-phase');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const el=(n,a,p=svg)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e};
+  const WH='#FFFFFF',BL='#1A3987',BLL='#7D96DA';
+  const wait=ms=>new Promise(r=>setTimeout(r,ms));
+  // static frame
+  el('rect',{x:8,y:8,width:384,height:384,fill:'none',stroke:'#2A2C34',rx:3});
+  for(let i=0;i<14;i++){const p=40+i*23;[[p,14,12,16],[p,370,12,16],[14,p,16,12],[370,p,16,12]].forEach(([x,y,w,h])=>el('rect',{x,y,width:w,height:h,fill:'none',stroke:'#4A4C55'}))}
+  el('rect',{x:44,y:44,width:312,height:312,fill:'none',stroke:BLL,'stroke-dasharray':'3 3',opacity:.6});
+  const layer=el('g',{});
+  const setP=t=>phase.innerHTML='<i class="dot"></i><b>alu_4bit</b> · '+t;
+  let seed=11,visible=true,running=false;const rnd=()=>(seed=(seed*9301+49297)%233280)/233280;
+  const draw=(p,ms)=>{const L=p.getTotalLength();p.style.strokeDasharray=L;p.style.strokeDashoffset=L;p.style.transition=`stroke-dashoffset ${ms}ms ease`;return p};
+  const until=async()=>{while(!visible)await wait(300)};
+
+  async function cycle(){
+    layer.innerHTML='';layer.style.transition='opacity .6s';layer.style.opacity=1;
+    // floorplan: macros + power stripes
+    setP('floorplan');stage.textContent='die 400×400';
+    const macros=rnd()>.5?[[56,56,110,84],[234,262,110,82]]:[[234,56,110,84],[56,262,110,82]];
+    const fp=el('g',{},layer);fp.style.opacity=0;fp.style.transition='opacity .6s';
+    macros.forEach(([x,y,w,h])=>{el('rect',{x,y,width:w,height:h,fill:'#0E1633',stroke:WH},fp);
+      for(let gx=x+11;gx<x+w;gx+=11)el('line',{x1:gx,y1:y,x2:gx,y2:y+h,stroke:'#33437A','stroke-width':.6},fp);
+      for(let gy=y+11;gy<y+h;gy+=11)el('line',{x1:x,y1:gy,x2:x+w,y2:gy,stroke:'#33437A','stroke-width':.6},fp)});
+    requestAnimationFrame(()=>fp.style.opacity=1);
+    await wait(500);
+    setP('power plan');stage.textContent='VDD / VSS grid';
+    const stripes=[];for(let x=70;x<350;x+=56)stripes.push(draw(el('line',{x1:x,y1:44,x2:x,y2:356,stroke:BL,'stroke-width':2.4,opacity:.75},layer),700));
+    stripes.forEach((p,j)=>setTimeout(()=>p.style.strokeDashoffset=0,j*80));
+    await wait(1100);await until();
+    // placement
+    setP('placement');
+    const inMacro=(x,y,w)=>macros.some(([mx,my,mw,mh])=>x+w>mx-3&&x<mx+mw+3&&y+8>my-3&&y<my+mh+3);
+    const cells=[];for(let y=56;y<346;y+=11){let x=56;while(x<340){const w=4+Math.floor(rnd()*14);if(x+w>344)break;if(!inMacro(x,y,w)&&rnd()>.18)cells.push({x,y,w});x+=w+1+Math.floor(rnd()*3)}}
+    const g=el('g',{},layer);
+    const rects=cells.map(c=>{const r=el('rect',{x:c.x,y:c.y,width:c.w,height:8,fill:rnd()>.86?WH:'#4F5262'},g);r.style.opacity=0;r.style.transition='opacity .4s';return r});
+    for(let i=0;i<rects.length;){for(let k=0;k<14&&i<rects.length;k++,i++)rects[i].style.opacity=1;stage.textContent='cells: '+i;await wait(30)}
+    await wait(400);await until();
+    // CTS
+    setP('clock tree');stage.textContent='building CTS';
+    const clk=[];const H=(cx,cy,s,d)=>{if(!d)return;clk.push(draw(el('path',{d:`M${cx-s} ${cy-s/2} V${cy+s/2} M${cx-s} ${cy} H${cx+s} M${cx+s} ${cy-s/2} V${cy+s/2}`,fill:'none',stroke:BLL,'stroke-width':1.7},layer),900));
+      [[cx-s,cy-s/2],[cx-s,cy+s/2],[cx+s,cy-s/2],[cx+s,cy+s/2]].forEach(([x,y])=>H(x,y,s/2,d-1))};
+    H(200,200,70,2);clk.forEach((p,j)=>setTimeout(()=>p.style.strokeDashoffset=0,j*90));
+    await wait(1400);stage.textContent='skew balanced';await wait(400);await until();
+    // routing
+    setP('routing');
+    const routes=[];for(let i=0;i<18;i++){const a=cells[Math.floor(rnd()*cells.length)],b=cells[Math.floor(rnd()*cells.length)];const mx=a.x+(b.x-a.x)*rnd();
+      routes.push(draw(el('path',{d:`M${a.x} ${a.y+4} H${mx} V${b.y+4} H${b.x}`,fill:'none',stroke:WH,'stroke-width':1.1},layer),1200))}
+    routes.forEach((p,j)=>setTimeout(()=>{p.style.strokeDashoffset=0;stage.textContent='nets: '+(j+1)},j*110));
+    await wait(routes.length*110+1300);await until();
+    // signoff
+    setP('signoff');stage.textContent='timing met ✓';
+    await wait(2600);await until();
+    if(reduce)return;
+    layer.style.opacity=0;stage.textContent='next run…';
+    await wait(700);
+  }
+  async function loop(){if(running)return;running=true;do{await cycle()}while(!reduce)}
+
+  new IntersectionObserver(es=>{visible=es[0].isIntersecting;if(visible)loop()}).observe(svg);
+})();
+
+// enquiry form
+document.querySelectorAll('[data-topic]').forEach(a=>a.addEventListener('click',()=>{document.getElementById('topic').value=a.dataset.topic}));
+document.getElementById('enquiry').addEventListener('submit',e=>{
+  e.preventDefault();const f=e.target,note=document.getElementById('form-note');
+  if(!f.name.value.trim()||!f.email.value.includes('@')||!f.message.value.trim()){note.textContent='Please add your name, a valid email and a message.';return}
+  const body=`Name: ${f.name.value}\nEmail: ${f.email.value}\nPhone: ${f.phone.value}\nCollege / organisation: ${f.org.value}\n\n${f.message.value}`;
+  location.href='mailto:info@atmossiliconlabs.com?subject='+encodeURIComponent('Enquiry: '+f.topic.value)+'&body='+encodeURIComponent(body);
+  note.textContent='Opening your email app… If nothing opens, write to info@atmossiliconlabs.com';
+});
+</script>
+</body>
+</html>
