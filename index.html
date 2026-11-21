@@ -77,36 +77,34 @@ header.dark .links .btn{background:#fff;color:var(--ink);border-color:#fff}
   .links .btn{margin:14px 20px;justify-content:center;background:var(--ink)!important;color:#fff!important}
 }
 
-/* ---------- HERO (pinned) ---------- */
+/* ---------- HERO (pinned fabrication) ---------- */
 .pin{position:relative}
 .stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
-#hero{height:320vh;background:var(--paper)}
-#hero .stage{background:radial-gradient(ellipse 70% 55% at 50% 62%,#fff 0%,var(--paper) 70%)}
+#hero{height:1000vh;background:var(--paper)}
+#hero .stage{background:radial-gradient(ellipse 70% 55% at 55% 60%,#fff 0%,var(--paper) 70%)}
 .floor{position:absolute;left:-20%;right:-20%;bottom:-10%;height:62%;background-image:linear-gradient(rgba(10,10,11,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(10,10,11,.07) 1px,transparent 1px);background-size:64px 64px;transform:perspective(700px) rotateX(64deg);transform-origin:50% 0;-webkit-mask-image:linear-gradient(180deg,transparent,#000 30%,#000 60%,transparent);mask-image:linear-gradient(180deg,transparent,#000 30%,#000 60%,transparent)}
 .hero-copy{position:absolute;top:96px;left:0;right:0;z-index:3}
 .hero-copy .row{display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
 .hero-copy p{max-width:36ch;font-size:15px;color:var(--ink-2)}
 .hero-word{position:absolute;left:0;right:0;bottom:3vh;z-index:1;text-align:center;font-size:clamp(64px,17.5vw,300px);color:var(--ink);white-space:nowrap;pointer-events:none}
 .hero-word em{font-style:normal;color:transparent;-webkit-text-stroke:1.5px var(--ink)}
-.scene{position:absolute;left:50%;top:47%;width:min(60vw,560px);aspect-ratio:1;transform:translate(-50%,-50%);z-index:2;perspective:1100px}
-.wafer{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
-.wafer svg{width:100%;height:100%;filter:drop-shadow(0 40px 40px rgba(10,10,11,.18))}
-.lift{position:absolute;left:50%;top:50%;width:13%;aspect-ratio:1;transform:translate(-50%,-50%);z-index:3;will-change:transform}
-.lift .die{width:100%;height:100%;border-radius:3px;background:linear-gradient(135deg,#4F6FD6,#1A3987 55%,#0E1E52);box-shadow:0 0 0 1px rgba(255,255,255,.35) inset,0 30px 50px -10px rgba(10,10,11,.45);position:relative;overflow:hidden}
-.lift .die::before{content:"";position:absolute;inset:8%;border:1px solid rgba(255,255,255,.35);background-image:linear-gradient(rgba(255,255,255,.18) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);background-size:100% 12%,9% 100%}
-.lift .die::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.45) 45%,transparent 60%);transform:translateX(-100%);animation:sheen 3.5s infinite}
-@keyframes sheen{60%,100%{transform:translateX(100%)}}
-.arm{position:absolute;left:50%;bottom:50%;width:2px;margin-left:-1px;background:var(--ink);z-index:4;transform-origin:50% 0;will-change:height}
-.arm::after{content:"";position:absolute;left:50%;bottom:-10px;width:34px;height:10px;margin-left:-17px;background:var(--ink);border-radius:2px 2px 6px 6px}
-.hud{position:absolute;right:32px;bottom:34%;z-index:4;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--ink-2);text-align:right;line-height:1.9}
-.hud b{color:var(--blue);font-weight:500}
-.scroll-cue{position:absolute;left:32px;bottom:34%;z-index:4;display:flex;align-items:center;gap:10px}
+.fab{position:absolute;left:57%;top:52%;width:min(80vw,1000px,calc(100vh*1.2));aspect-ratio:4/3;transform:translate(-50%,-50%);z-index:2;perspective:1400px}
+.fab svg{width:100%;height:100%;overflow:visible;will-change:transform}
+.fab-hud{position:absolute;left:32px;bottom:34px;z-index:4;width:min(430px,40vw);opacity:0;transition:opacity .5s}
+.fab-hud.on{opacity:1}
+.fab-hud .mono{color:var(--blue)}
+.fab-name{font-size:clamp(32px,4vw,64px);margin:10px 0 12px;transition:opacity .3s,transform .4s var(--ease)}
+.fab-desc{font-size:15px;color:var(--ink-2);min-height:4.8em;transition:opacity .3s}
+.fab-hud.swap .fab-name,.fab-hud.swap .fab-desc{opacity:0;transform:translateY(8px)}
+.fab-ticks{display:flex;gap:5px;margin-top:16px}
+.fab-ticks i{flex:1;max-width:30px;height:3px;background:rgba(10,10,11,.12);position:relative;overflow:hidden}
+.fab-ticks i b{position:absolute;inset:0;background:var(--blue);transform:scaleX(0);transform-origin:0 50%}
+.scroll-cue{position:absolute;right:32px;bottom:40px;z-index:4;display:flex;align-items:center;gap:10px}
 .scroll-cue i{width:1px;height:42px;background:var(--ink);position:relative;overflow:hidden;opacity:.4}
 .scroll-cue i::after{content:"";position:absolute;left:0;top:-40%;width:1px;height:40%;background:var(--ink);animation:cue 1.8s infinite}
 @keyframes cue{to{top:100%}}
-@media(max-width:700px){.hero-copy .row{flex-direction:column}.hud,.scroll-cue{display:none}.scene{width:88vw;top:56%}}
 .dim{position:absolute;inset:0;background:var(--ink);opacity:0;z-index:5;pointer-events:none}
-
+@media(max-width:800px){.hero-copy .row{flex-direction:column}.scroll-cue{display:none}.fab{left:50%;top:42%;width:150vw}.fab-hud{left:20px;right:20px;bottom:22px;width:auto}.fab-name{font-size:30px;margin:6px 0 8px}.fab-desc{font-size:13.5px;min-height:4.4em}}
 /* ---------- BUILD (pinned dark) ---------- */
 #build{height:420vh;background:var(--ink);color:#fff}
 #build .stage{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:40px;padding:90px 32px 40px;max-width:1320px;margin:0 auto}
@@ -386,7 +384,7 @@ body.go .hero-copy .fadein{opacity:1;transform:none}
 
 <main id="top">
 
-<!-- HERO: wafer → die pick -->
+<!-- HERO: fabrication sequence -->
 <section id="hero" class="pin" data-theme="light">
   <div class="stage">
     <div class="floor"></div>
@@ -396,13 +394,9 @@ body.go .hero-copy .fadein{opacity:1;transform:none}
         <p class="fadein">Hands-on chip design programs for engineering colleges: RTL, synthesis, timing and physical design, on open-source EDA tools, taught by engineers who do this work.</p>
       </div>
     </div>
-    <div class="scene" aria-hidden="true">
-      <div class="wafer" id="wafer"><svg viewBox="0 0 600 600" id="waferSvg"></svg></div>
-      <div class="arm" id="arm"></div>
-      <div class="lift" id="lift"><div class="die"></div></div>
-    </div>
-    <div class="hud" aria-hidden="true"><div>WAFER <b>300 mm</b></div><div>DIE <b id="hudDie">— · —</b></div><div id="hudState">INSPECTING</div></div>
-    <div class="scroll-cue mono"><i></i>Scroll</div>
+    <div class="fab" id="fab" aria-hidden="true"><svg viewBox="0 0 800 600" id="fabSvg"></svg></div>
+    <div class="fab-hud" id="fabHud" aria-live="polite"><span class="mono" id="fabNum">01 / 11 · Fabrication</span><h2 class="disp fab-name" id="fabName">Crystal growth</h2><p class="fab-desc" id="fabDesc"></p><div class="fab-ticks" id="fabTicks"></div></div>
+    <div class="scroll-cue mono" id="scrollCue"><i></i>Scroll to make a chip</div>
     <div class="dim" id="dim"></div>
     <h1 class="hero-word disp" aria-label="Atmos Silicon Labs: learn chip design the way it's actually done"><span class="ch">R</span><span class="ch">T</span><span class="ch">L</span><em class="ch">→</em><span class="ch">G</span><span class="ch">D</span><span class="ch">S</span></h1>
   </div>
@@ -640,64 +634,245 @@ document.getElementById('yr').textContent=new Date().getFullYear();
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
 document.querySelectorAll('.lines,.fade').forEach(n=>io.observe(n));
 
-/* ---------- HERO wafer ---------- */
-const wsvg=document.getElementById('waferSvg');
-(function buildWafer(){
-  const defs=el('defs',{},wsvg);
-  const g1=el('radialGradient',{id:'wg',cx:'40%',cy:'35%',r:'75%'},defs);
-  [['0','#8FA6EE'],['.45','#3556C4'],['.8','#1A2F7A'],['1','#101A44']].forEach(([o,c])=>el('stop',{offset:o,'stop-color':c},g1));
-  const g2=el('linearGradient',{id:'sh',x1:'0',y1:'0',x2:'1',y2:'1'},defs);
-  [['0','rgba(255,255,255,0)'],['.42','rgba(255,255,255,0)'],['.5','rgba(255,255,255,.55)'],['.58','rgba(255,255,255,0)'],['1','rgba(255,255,255,0)']].forEach(([o,c])=>el('stop',{offset:o,'stop-color':c},g2));
-  const cp=el('clipPath',{id:'wc'},defs);el('circle',{cx:300,cy:300,r:272},cp);
-  el('circle',{cx:300,cy:300,r:290,fill:'#C9CCD3'},wsvg);
-  el('circle',{cx:300,cy:300,r:284,fill:'#E9EAEE'},wsvg);
-  el('circle',{cx:300,cy:300,r:276,fill:'url(#wg)'},wsvg);
-  const grid=el('g',{'clip-path':'url(#wc)'},wsvg);
-  const S=40;
-  for(let y=20;y<580;y+=S)for(let x=20;x<580;x+=S){
-    const cx=x+S/2,cy=y+S/2;const d=Math.hypot(cx-300,cy-300);if(d>262)continue;
-    const r=el('rect',{x:x+2,y:y+2,width:S-4,height:S-4,rx:1.5,fill:'rgba(255,255,255,'+(0.05+((x*7+y*3)%11)/140)+')',stroke:'rgba(190,205,255,.35)','stroke-width':.8},grid);
-    if(x===260&&y===260)r.setAttribute('id','hole');
-  }
-  el('rect',{x:0,y:0,width:600,height:600,fill:'url(#sh)','clip-path':'url(#wc)',id:'shine'},wsvg);
-  el('path',{d:'M285 588 h30 l-6 8 h-18z',fill:'#C9CCD3'},wsvg);
-})();
+/* ---------- HERO: fabrication sequence ---------- */
 const PM={x:0,y:0,tx:0,ty:0};
-const hero=document.getElementById('hero'),wafer=document.getElementById('wafer'),lift=document.getElementById('lift'),arm=document.getElementById('arm'),hole=document.getElementById('hole'),shine=document.getElementById('shine');
-const hudDie=document.getElementById('hudDie'),hudState=document.getElementById('hudState'),heroWord=document.querySelector('.hero-word');
+const hero=document.getElementById('hero'),heroWord=document.querySelector('.hero-word'),heroCopy=document.querySelector('.hero-copy');
+const fsvg=document.getElementById('fabSvg'),fabBox=document.getElementById('fab');
+const STAGES=[
+ ['Crystal growth','Polysilicon is melted at over 1,400 °C, and a seed crystal slowly pulls a single-crystal ingot out of the melt.'],
+ ['Wafer slicing','A wire saw slices the ingot into wafers less than a millimetre thick.'],
+ ['Polishing','Each wafer is lapped and chemically-mechanically polished to a mirror-flat surface.'],
+ ['Oxide & resist','A thin oxide is grown, then the spinning wafer is coated with light-sensitive photoresist.'],
+ ['Lithography','Ultraviolet light shines through a mask, printing one layer of the design, die by die.'],
+ ['Etch & deposit','Exposed areas are etched away and new films deposited. The cycle repeats for every layer.'],
+ ['Ion implant','Dopant ions are fired into the silicon to form the transistors’ wells, sources and drains.'],
+ ['Metallisation','Copper interconnects wire the transistors together, layer upon layer.'],
+ ['Wafer test','Probe needles test every die on the wafer. Failing die are marked.'],
+ ['Dicing','The wafer is cut along its scribe lines into individual die.'],
+ ['Packaging','A good die is picked, wire-bonded into its package and sealed. It’s a chip.']
+];
+const F={};const K=.42,CX=400,CY=350,R=230,S=34;
+(function buildFab(){
+  const defs=el('defs',{},fsvg);
+  const lg=(id,stops,a={x1:0,y1:0,x2:1,y2:0})=>{const g=el('linearGradient',Object.assign({id},a),defs);stops.forEach(([o,c,op])=>el('stop',{offset:o,'stop-color':c,'stop-opacity':op==null?1:op},g));return g};
+  const rg=(id,stops,a={})=>{const g=el('radialGradient',Object.assign({id},a),defs);stops.forEach(([o,c,op])=>el('stop',{offset:o,'stop-color':c,'stop-opacity':op==null?1:op},g));return g};
+  lg('ingot',[[0,'#5d636e'],[.18,'#c9ced8'],[.38,'#eef0f4'],[.6,'#9aa1ad'],[1,'#454a54']]);
+  rg('melt',[[0,'#FFE7A3'],[.45,'#FF9A2E'],[1,'#C2410C']]);
+  rg('heat',[[0,'#FF8A1F',.55],[1,'#FF8A1F',0]]);
+  rg('si',[[0,'#d9dde6'],[.55,'#9aa3b5'],[1,'#5b6476']],{cx:'38%',cy:'30%',r:'80%'});
+  lg('uv',[[0,'#8B5CF6',.65],[1,'#8B5CF6',.05]],{x1:0,y1:0,x2:0,y2:1});
+  lg('shine',[[0,'#fff',0],[.45,'#fff',0],[.5,'#fff',.75],[.55,'#fff',0],[1,'#fff',0]]);
+  lg('mold',[[0,'#26282f'],[1,'#0d0e12']],{x1:0,y1:0,x2:1,y2:1});
+  const tf=el('filter',{id:'rough'},defs);el('feTurbulence',{type:'fractalNoise',baseFrequency:'.9',numOctaves:2,result:'n'},tf);el('feColorMatrix',{type:'saturate',values:0,result:'g'},tf);el('feComposite',{in:'g',in2:'SourceGraphic',operator:'in'},tf);
+  const cp=el('clipPath',{id:'wclip'},defs);el('circle',{cx:0,cy:0,r:R},cp);
+
+  // --- crucible + ingot (stage 1-2)
+  F.cru=el('g',{},fsvg);
+  el('ellipse',{cx:CX,cy:470,rx:190,ry:70,fill:'url(#heat)'},F.cru);
+  el('path',{d:'M262 462 L282 548 Q400 578 518 548 L538 462 Z',fill:'#3a3d46'},F.cru);
+  el('path',{d:'M262 462 L282 548 Q400 578 518 548 L538 462',fill:'none',stroke:'#8b909c','stroke-width':2},F.cru);
+  el('ellipse',{cx:CX,cy:466,rx:136,ry:24,fill:'url(#melt)'},F.cru);
+  F.seed=el('line',{x1:CX,y1:-80,x2:CX,y2:466,stroke:'#0A0A0B','stroke-width':3},fsvg);
+  F.ing=el('g',{},fsvg);
+  F.ingBody=el('rect',{x:CX-58,y:200,width:116,height:266,fill:'url(#ingot)'},F.ing);
+  F.ingTop=el('path',{d:'',fill:'#b8bdc8'},F.ing);
+  F.ingBot=el('ellipse',{cx:CX,cy:466,rx:58,ry:11,fill:'#FFB45C',opacity:.9},F.ing);
+  F.cuts=el('g',{},fsvg);F.cutL=[];
+  for(let i=0;i<9;i++){const y=230+i*26;F.cutL.push(el('ellipse',{cx:CX,cy:y,rx:58,ry:10,fill:'none',stroke:'#0A0A0B','stroke-width':1.4,opacity:0},F.cuts))}
+  F.wire=el('line',{x1:CX-110,x2:CX+110,y1:0,y2:0,stroke:'#1A3987','stroke-width':2,opacity:0},fsvg);
+  F.slices=el('g',{},fsvg);F.sl=[];
+  for(let i=0;i<8;i++){const g=el('g',{},F.slices);el('ellipse',{cx:0,cy:5,rx:58,ry:11,fill:'#6b7280'},g);el('ellipse',{cx:0,cy:0,rx:58,ry:11,fill:'#c9ced8',stroke:'#8b909c'},g);F.sl.push(g)}
+
+  // --- mask + UV (stage 5)
+  F.uvg=el('g',{opacity:0},fsvg);
+  el('rect',{x:CX-40,y:-10,width:80,height:22,rx:4,fill:'#0A0A0B'},F.uvg);
+  F.uv=el('path',{d:`M${CX-30} 12 L${CX-150} 92 L${CX+150} 92 L${CX+30} 12Z`,fill:'url(#uv)'},F.uvg);
+  F.uv2=el('path',{d:'',fill:'url(#uv)',opacity:.8},F.uvg);
+  const mk=el('g',{transform:`translate(${CX} 110) scale(1 ${K})`},F.uvg);
+  el('rect',{x:-160,y:-160,width:320,height:320,fill:'rgba(240,243,250,.92)',stroke:'#0A0A0B','stroke-width':2.4},mk);
+  for(let i=-140;i<=140;i+=28){el('line',{x1:i,y1:-150,x2:i,y2:150,stroke:'#1A3987','stroke-width':1.2,opacity:.55},mk);el('line',{x1:-150,y1:i,x2:150,y2:i,stroke:'#1A3987','stroke-width':1.2,opacity:.55},mk)}
+  el('rect',{x:-60,y:-60,width:120,height:120,fill:'none',stroke:'#0A0A0B','stroke-width':4},mk);
+
+  // --- wafer (squashed group)
+  F.w=el('g',{},fsvg);
+  F.wEdge=el('ellipse',{cx:0,cy:0,rx:R,ry:R,fill:'#8b909c'},F.w);
+  F.wTop=el('g',{},F.w);
+  el('circle',{cx:0,cy:0,r:R,fill:'url(#si)'},F.wTop);
+  F.rough=el('circle',{cx:0,cy:0,r:R,fill:'#9aa1ad',filter:'url(#rough)',opacity:1},F.wTop);
+  F.film=el('circle',{cx:0,cy:0,r:0,fill:'#E0A140',opacity:.55},F.wTop);
+  F.oxide=el('circle',{cx:0,cy:0,r:R,fill:'#3556C4',opacity:0},F.wTop);
+  F.streaks=el('g',{'clip-path':'url(#wclip)',opacity:0},F.wTop);
+  for(let a=0;a<360;a+=20){const r=a*Math.PI/180;el('line',{x1:0,y1:0,x2:Math.cos(r)*R,y2:Math.sin(r)*R,stroke:'#fff','stroke-width':3,opacity:.25},F.streaks)}
+  F.diesG=el('g',{},F.wTop);F.dies=[];
+  let s=7;const rnd=()=>(s=(s*9301+49297)%233280)/233280;
+  for(let y=-R;y<R;y+=S)for(let x=-R;x<R;x+=S){
+    const cs=[[x,y],[x+S,y],[x,y+S],[x+S,y+S]];if(cs.some(([a,b])=>Math.hypot(a,b)>R-8))continue;
+    const g=el('g',{},F.diesG);
+    const r=el('rect',{x:x+1.5,y:y+1.5,width:S-3,height:S-3,fill:'#fff','fill-opacity':0,stroke:'rgba(255,255,255,.25)','stroke-width':1},g);
+    const det=el('path',{d:`M${x+7} ${y+7}h${S-14}v${S-14}h${-(S-14)}z M${x+7} ${y+S/2}h${S-14} M${x+S/2} ${y+7}v${S-14}`,fill:'none',stroke:'#C9D4F5','stroke-width':1.2,opacity:0},g);
+    const met=el('path',{d:`M${x+5} ${y+11}h${S-10} M${x+5} ${y+S-11}h${S-10} M${x+12} ${y+5}v${S-10} M${x+S-12} ${y+5}v${S-10}`,fill:'none',stroke:'#E7B04A','stroke-width':1.8,opacity:0},g);
+    F.dies.push({g,r,det,met,cx:x+S/2,cy:y+S/2,bad:rnd()<.09});
+  }
+  F.dies.sort((a,b)=>a.cy-b.cy||a.cx-b.cx);F.dies.forEach((d,i)=>d.i=i);
+  F.pickI=F.dies.reduce((best,d,i)=>{if(d.bad)return best;const v=Math.hypot(d.cx-10,d.cy-10);return v<best.v?{i,v}:best},{i:0,v:1e9}).i;
+  F.step=el('rect',{x:0,y:0,width:S,height:S,fill:'#C4B5FD',opacity:0},F.wTop);
+  F.tint=el('circle',{cx:0,cy:0,r:R,fill:'#8B5CF6',opacity:0},F.wTop);
+  F.cutG=el('g',{'clip-path':'url(#wclip)'},F.wTop);F.cutLines=[];
+  for(let v=-R+S*0;v<=R;v+=S){[[v,-R,v,R],[-R,v,R,v]].forEach(([a,b,c,d])=>{const l=el('line',{x1:a,y1:b,x2:c,y2:d,stroke:'#0A0A0B','stroke-width':2.2},F.cutG);F.cutLines.push(l)})}
+  // align cut lines with the die grid (grid starts at -R)
+  F.shineR=el('rect',{x:-R,y:-R,width:2*R,height:2*R,fill:'url(#shine)','clip-path':'url(#wclip)',opacity:0},F.wTop);
+  F.probe=el('g',{opacity:0},F.wTop);
+  el('rect',{x:-S/2-3,y:-S/2-3,width:S+6,height:S+6,fill:'none',stroke:'#0A0A0B','stroke-width':2.5},F.probe);
+
+  // probe needles (screen space)
+  F.needles=el('g',{opacity:0},fsvg);
+  F.n1=el('path',{d:'',stroke:'#0A0A0B','stroke-width':2.5,fill:'none'},F.needles);
+  F.n2=el('path',{d:'',stroke:'#0A0A0B','stroke-width':2.5,fill:'none'},F.needles);
+  F.n3=el('path',{d:'',stroke:'#0A0A0B','stroke-width':2.5,fill:'none'},F.needles);
+
+  // ions (screen space)
+  F.ions=el('g',{opacity:0},fsvg);F.ion=[];
+  for(let i=0;i<70;i++){const x=CX-200+rnd()*400;F.ion.push({c:el('circle',{cx:x,cy:0,r:2.4,fill:'#7C3AED'},F.ions),x,o:rnd()})}
+  F.gun=el('rect',{x:CX-210,y:-24,width:420,height:20,rx:4,fill:'#0A0A0B'},F.ions);
+
+  // cross-section card (stage 6)
+  F.xs=el('g',{opacity:0,transform:'translate(-303 -10)'},fsvg);
+  el('rect',{x:618,y:40,width:170,height:170,rx:10,fill:'#fff',stroke:'#DCDDDF'},F.xs);
+  const tx=el('text',{x:632,y:62,'font-family':'IBM Plex Mono, monospace','font-size':10,'letter-spacing':'1.5',fill:'#73767F'},F.xs);tx.textContent='CROSS-SECTION';
+  el('rect',{x:632,y:170,width:142,height:26,fill:'#9aa1ad'},F.xs);
+  F.xl=[['#3556C4',160,10],['#D2453B',144,16],['#C9CED8',132,12],['#E7B04A',116,16],['#C9CED8',102,14],['#E7B04A',86,16]].map(([c,y,h],i)=>{
+    const pattern=i%2===1;const g=el('g',{opacity:0},F.xs);
+    if(pattern){for(let k=0;k<4;k++)el('rect',{x:640+k*36,y,width:22,height:h,fill:c},g)}else el('rect',{x:632,y,width:142,height:h,fill:c,opacity:.85},g);
+    return g});
+
+  // pick arm + package
+  F.arm=el('g',{opacity:0},fsvg);F.armL=el('line',{x1:0,y1:-200,x2:0,y2:0,stroke:'#0A0A0B','stroke-width':3},F.arm);F.armH=el('rect',{x:-22,y:-8,width:44,height:10,rx:3,fill:'#0A0A0B'},F.arm);
+  F.pkg=el('g',{opacity:0},fsvg);
+  F.pkgFlat=el('g',{transform:`translate(${CX} ${CY}) scale(1 ${K})`},F.pkg);
+  el('rect',{x:-158,y:-148,width:316,height:316,rx:10,fill:'#3a3d46'},F.pkgFlat);
+  el('rect',{x:-160,y:-160,width:320,height:320,rx:10,fill:'#1d4733'},F.pkgFlat);
+  F.leads=[];for(let i=0;i<9;i++){const p=-128+i*32;[[p,-150],[p,150],[-150,p],[150,p]].forEach(([x,y],j)=>{el('rect',{x:x-8,y:y-8,width:16,height:16,rx:2,fill:'#E7B04A'},F.pkgFlat);F.leads.push([x,y,j])})}
+  el('rect',{x:-70,y:-70,width:140,height:140,fill:'#C9CED8',opacity:.35},F.pkgFlat);
+  F.wires=F.leads.map(([x,y,j])=>{const dx=j===2?-55:j===3?55:x*.42,dy=j===0?-55:j===1?55:y*.42;const p=el('path',{d:`M${dx} ${dy} Q${(dx+x)/2} ${(dy+y)/2-26} ${x} ${y}`,fill:'none',stroke:'#F3C969','stroke-width':1.6},F.pkgFlat);return p});
+  F.lid=el('g',{opacity:0},F.pkgFlat);
+  el('rect',{x:-138,y:-138,width:276,height:276,rx:14,fill:'url(#mold)'},F.lid);
+  el('circle',{cx:-108,cy:-108,r:8,fill:'#3a3d46'},F.lid);
+  const t1=el('text',{x:0,y:-6,'text-anchor':'middle',fill:'#E9EAEE','font-family':'Michroma, sans-serif','font-size':30,'letter-spacing':'8'},F.lid);t1.textContent='ATMOS';
+  const t2=el('text',{x:0,y:34,'text-anchor':'middle',fill:'#7D96DA','font-family':'IBM Plex Mono, monospace','font-size':16,'letter-spacing':'3'},F.lid);t2.textContent='ALU-4 · 2026';
+  F.pick=el('g',{opacity:0},fsvg);
+  F.pickR=el('rect',{x:-S/2,y:-S/2,width:S,height:S,fill:'#3FB97A',stroke:'#0A0A0B','stroke-width':1},F.pick);
+  F.pickD=el('path',{d:`M${-S/2+6} ${-S/2+6}h${S-12}v${S-12}h${-(S-12)}z M${-S/2+6} 0h${S-12} M0 ${-S/2+6}v${S-12}`,fill:'none',stroke:'#E7B04A','stroke-width':1.4},F.pick);
+  F.pickShadow=el('ellipse',{cx:CX,cy:CY,rx:30,ry:8,fill:'rgba(10,10,11,.25)',opacity:0},fsvg);
+  fsvg.insertBefore(F.pickShadow,F.pick);
+  [...F.cutLines,...F.wires].forEach(p=>{const L=p.getTotalLength?p.getTotalLength():600;p._L=L||600;p.style.strokeDasharray=p._L;p.style.strokeDashoffset=p._L});
+})();
+// HUD
+const fabHud=document.getElementById('fabHud'),fabNum=document.getElementById('fabNum'),fabName=document.getElementById('fabName'),fabDesc=document.getElementById('fabDesc'),fabTicks=document.getElementById('fabTicks');
+STAGES.forEach(()=>{const i=document.createElement('i');i.innerHTML='<b></b>';fabTicks.appendChild(i)});
+let curStage=-1,swapT=0;
+function setStage(i){if(i===curStage)return;curStage=i;fabHud.classList.add('swap');clearTimeout(swapT);swapT=setTimeout(()=>{if(curStage>=0){fabNum.textContent=String(curStage+1).padStart(2,'0')+' / '+STAGES.length+' · Fabrication';fabName.textContent=STAGES[curStage][0];fabDesc.textContent=STAGES[curStage][1]}fabHud.classList.remove('swap')},180)}
+const vis=(n,o)=>n.setAttribute('opacity',o.toFixed(3));
 function heroFrame(){
   const p=progressOf(hero);
-  // 0-.3 wafer tilts in; .3-.55 arm descends & grabs; .55-.85 die lifts & grows; .85-1 die fills screen
-  const t1=ease(seg(p,0,.3));
-  const rx=lerp(8,62,t1),rz=lerp(-12,18,t1),sc=lerp(.92,1,t1);
-  wafer.style.transform=`rotateX(${rx-PM.y*6}deg) rotateY(${PM.x*8}deg) rotateZ(${rz}deg) scale(${sc})`;
-  shine.setAttribute('transform',`translate(${lerp(-260,260,seg(p,0,.55))} 0)`);
-  const t3=ease(seg(p,.5,.82)), t4=ease(seg(p,.82,1));
-  const liftY=-lerp(0,innerHeight*.33,t3);
-  const liftS=1+t3*1.1+t4*9;
-  const flat=p<.5?0:1;
-  lift.style.opacity=p<.48?0:1;
-  lift.style.transform=`translate(-50%,-50%) translateY(${liftY+lerp(0,innerHeight*.33,t4)}px) scale(${liftS}) rotate(${lerp(18,0,t3)}deg)`;
-  hole.setAttribute('fill',p>.5?'rgba(10,10,20,.75)':'rgba(255,255,255,.08)');
-  wafer.style.opacity=1-t4;
-  document.getElementById('dim').style.opacity=seg(p,.9,1);
-  heroWord.style.transform=`translateY(${t3*40}px)`;heroWord.style.opacity=1-t4*1.2;
-  hudDie.textContent=p<.3?'— · —':'X07 · Y06';
-  hudState.textContent=p<.3?'INSPECTING':p<.5?'PICKING DIE':p<.82?'LIFTING':'ZOOMING IN';
+  const P0=.045,P1=.965,N=STAGES.length,span=(P1-P0)/N;
+  const st=i=>clamp((p-P0-i*span)/span); // local 0..1 for stage i
+  const idx=Math.min(N-1,Math.max(-1,Math.floor((p-P0)/span)));
+  const intro=1-seg(p,0,P0);
+  fabBox.style.opacity=seg(p,P0*.25,P0*.9);
+  heroWord.style.opacity=intro;heroWord.style.transform=`translateY(${(1-intro)*60}px)`;heroCopy.style.opacity=intro;document.getElementById('scrollCue').style.opacity=intro;
+  fabHud.classList.toggle('on',p>P0*.6&&p<.985);setStage(idx<0?0:idx);
+  [...fabTicks.children].forEach((t,i)=>t.firstChild.style.transform=`scaleX(${st(i)})`);
+  const a=st(0),b=st(1),c=st(2),d=st(3),e=st(4),f=st(5),g=st(6),h=st(7),k=st(8),l=st(9),m=st(10);
+  fabBox.style.transform=`translate(-50%,-50%) rotateX(${-PM.y*3}deg) rotateY(${PM.x*4}deg)`;
+  // 1 crystal growth (visible during intro too, as a still crucible)
+  vis(F.cru,1-ease(seg(b,0,.35)));
+  const ingTop=lerp(452,206,ease(a));
+  F.ingBody.setAttribute('y',ingTop+12);F.ingBody.setAttribute('height',Math.max(0,466-ingTop-12));
+  F.ingTop.setAttribute('d',`M${CX-58} ${ingTop+12} Q${CX} ${ingTop-26} ${CX+58} ${ingTop+12} A58 11 0 0 1 ${CX-58} ${ingTop+12}Z`);
+  F.seed.setAttribute('y2',ingTop-10);
+  vis(F.seed,(a>0||p>0)?1-ease(seg(b,0,.3)):1);
+  vis(F.ingBot,1-seg(b,0,.2));
+  vis(F.ing,a>0.001?1-ease(seg(b,.45,.7)):0);
+  // 2 slicing
+  F.cutL.forEach((cl,i)=>vis(cl,seg(b,.05+i*.035,.1+i*.035)*(1-seg(b,.45,.7))));
+  const wy=lerp(206,466,seg(b,.05,.4));F.wire.setAttribute('y1',wy);F.wire.setAttribute('y2',wy);vis(F.wire,b>0&&b<.42?1:0);
+  const fan=ease(seg(b,.45,.75));
+  F.sl.forEach((sg,i)=>{const y=lerp(240+i*26,250+i*30,fan)+fan*(i-3.5)*6;const x=CX+fan*(i-3.5)*44;sg.setAttribute('transform',`translate(${x} ${y})`);vis(sg,seg(b,.42,.5)*(1-seg(b,.78,.95)))});
+  // wafer group placement
+  const wIn=ease(seg(b,.7,1));const wOut=ease(seg(m,.25,.55));
+  const ws=lerp(.25,1,wIn);
+  F.w.setAttribute('transform',`translate(${CX} ${lerp(300,CY,wIn)}) scale(${ws} ${ws*K})`);
+  vis(F.w,wIn*(1-wOut));
+  F.wEdge.setAttribute('transform',`translate(0 ${16/K})`);
+  // 3 polish
+  vis(F.rough,.9*(1-ease(c)));
+  vis(F.shineR,c>0&&c<1?Math.sin(c*Math.PI):0);F.shineR.setAttribute('transform',`translate(${lerp(-2*R,2*R,c)} 0)`);
+  // 4 oxide + resist spin coat
+  vis(F.oxide,.28*ease(seg(d,0,.35)));
+  F.film.setAttribute('r',R*ease(seg(d,.3,.95)));
+  vis(F.film,.55*(1-ease(seg(e,.1,1))*.8));
+  vis(F.streaks,Math.sin(Math.PI*seg(d,.2,1))*.9);F.streaks.setAttribute('transform',`rotate(${d*900})`);
+  // 5 lithography
+  vis(F.uvg,ease(seg(e,0,.12))*(1-ease(seg(e,.9,1))));
+  const NN=F.dies.length,exp=Math.floor(seg(e,.1,.9)*NN);
+  const cur=F.dies[Math.min(NN-1,exp)];
+  if(e>.1&&e<.9){vis(F.step,.9);F.step.setAttribute('x',cur.cx-S/2);F.step.setAttribute('y',cur.cy-S/2);
+    // beam from mask to current die (screen coords)
+    const sx=CX+cur.cx*ws,sy=lerp(300,CY,wIn)+cur.cy*ws*K;F.uv2.setAttribute('d',`M${CX-24} 128 L${sx-14} ${sy} L${sx+14} ${sy} L${CX+24} 128Z`)}
+  else{vis(F.step,0);F.uv2.setAttribute('d','')}
+  // per-die state
+  const etchT=ease(f),metT=h,testT=k;
+  const gap=ease(seg(l,.5,1))*.09;
+  F.dies.forEach((dd,i)=>{
+    const exposed=e>=.9||i<exp;
+    let fill='#fff',fo=0;
+    if(exposed){fill='#3556C4';fo=.55}
+    if(testT>0&&i/NN<seg(testT,.05,.95)){fill=dd.bad?'#D2453B':'#3FB97A';fo=.85}
+    if(i===F.pickI&&m>.3){fo=0}
+    dd.r.setAttribute('fill',fill);dd.r.setAttribute('fill-opacity',fo);
+    dd.r.setAttribute('stroke',exposed?'rgba(255,255,255,.55)':'rgba(255,255,255,.22)');
+    vis(dd.det,etchT*(i===F.pickI&&m>.3?0:1));
+    vis(dd.met,(metT>0&&i/NN<seg(metT,.05,.9)?1:0)*(i===F.pickI&&m>.3?0:1));
+    dd.g.setAttribute('transform',gap?`translate(${dd.cx*gap} ${dd.cy*gap})`:'');
+  });
+  // 6 etch: cross-section card
+  vis(F.xs,ease(seg(f,0,.1))*(1-ease(seg(g,.0,.15))));
+  F.xl.forEach((x,i)=>vis(x,seg(f,.1+i*.13,.2+i*.13)));
+  // 7 implant
+  vis(F.ions,Math.sin(Math.PI*clamp(g))*1);
+  const wyc=lerp(300,CY,wIn);
+  F.ion.forEach(o=>{const t=((g*3+o.o)%1);const y=lerp(0,wyc+ (o.x-CX)*0, t);o.c.setAttribute('cy',y);o.c.setAttribute('opacity',t>.92?0:1)});
+  vis(F.tint,.22*Math.sin(Math.PI*clamp(g)));
+  // 9 test: probe
+  if(k>0&&k<1){const pi=Math.min(NN-1,Math.floor(seg(k,.05,.95)*NN));const pd=F.dies[pi];vis(F.probe,1);F.probe.setAttribute('transform',`translate(${pd.cx} ${pd.cy})`);
+    const sx=CX+pd.cx,sy=CY+pd.cy*K;vis(F.needles,ease(seg(k,0,.08))*(1-ease(seg(k,.92,1))));
+    F.n1.setAttribute('d',`M${sx-150} ${sy-170} L${sx-60} ${sy-90} L${sx-6} ${sy-3}`);F.n2.setAttribute('d',`M${sx+150} ${sy-170} L${sx+60} ${sy-90} L${sx+6} ${sy-3}`);F.n3.setAttribute('d',`M${sx} ${sy-200} L${sx} ${sy-4}`)}
+  else{vis(F.probe,0);vis(F.needles,0)}
+  // 10 dicing
+  const cutT=seg(l,0,.55);F.cutLines.forEach((cl,i)=>{const lt=clamp(cutT*1.6-(i%28)/28*.6);cl.style.strokeDashoffset=cl._L*(1-lt)});
+  vis(F.cutG,1-ease(seg(m,.0,.2)));
+  // 11 pick + package
+  const pd=F.dies[F.pickI];
+  const sx0=CX+pd.cx*(1+gap),sy0=CY+pd.cy*(1+gap)*K;
+  const down=ease(seg(m,0,.18)),lift=ease(seg(m,.22,.45)),drop=ease(seg(m,.55,.72)),bond=seg(m,.72,.86),seal=ease(seg(m,.86,.97));
+  vis(F.arm,m>0&&m<.74?1:0);
+  const px=lerp(sx0,CX,ease(seg(m,.3,.6))),liftY=lift*150-drop*150;
+  const py=lerp(sy0,CY,ease(seg(m,.3,.6)))-liftY;
+  const psc=lerp(1,140/S,ease(seg(m,.3,.7)));
+  F.pick.setAttribute('transform',`translate(${px} ${py}) scale(${psc} ${psc*K})`);
+  vis(F.pick,m>.18&&seal<.6?1:0);
+  F.pickShadow.setAttribute('cx',px);F.pickShadow.setAttribute('cy',lerp(sy0,CY,ease(seg(m,.3,.6)))+12);F.pickShadow.setAttribute('rx',14*psc);vis(F.pickShadow,m>.22&&m<.72?.6*lift:0);
+  const armY=m<.22?lerp(-40,sy0-6,down):py-(S/2)*psc*K-6;
+  F.arm.setAttribute('transform',`translate(${px} ${armY})`);F.armL.setAttribute('y1',-armY-40);
+  vis(F.pkg,ease(seg(m,.35,.55)));
+  F.wires.forEach((w,i)=>w.style.strokeDashoffset=w._L*(1-clamp(bond*1.4-(i/F.wires.length)*.4)));
+  vis(F.lid,seal);
+  // finale: zoom chip and fade to dark
+  const z=ease(seg(p,P1-.006,1));
+  fsvg.style.transform=`scale(${1+z*1.6})`;fsvg.style.transformOrigin='50% 58%';
+  document.getElementById('dim').style.opacity=seg(p,.975,1);
 }
-/* pick arm: hangs from the top of the screen down to the die */
-arm.style.bottom='auto';
-function armFrame(){
-  const p=progressOf(hero);const sceneR=document.querySelector('.scene').getBoundingClientRect();
-  const lr=lift.getBoundingClientRect();
-  const topOfDie=lr.top+lr.height*.1-sceneR.top; // in scene coords
-  const visible=p>.3&&p<.9;
-  const t2=ease(seg(p,.3,.5));
-  const startTop=-sceneR.top; // top of viewport in scene coords
-  const target=p<.5?lerp(startTop,(sceneR.height/2)-lr.height*.6,t2):topOfDie;
-  arm.style.top=startTop+'px';arm.style.height=Math.max(0,target-startTop)+'px';arm.style.transform='none';
-  arm.style.opacity=visible?1:0;
-}
+function armFrame(){}
 
 /* ---------- BUILD layout ---------- */
 const lsvg=document.getElementById('layout');
