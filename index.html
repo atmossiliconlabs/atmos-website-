@@ -88,7 +88,7 @@ header.dark .links .btn{background:#fff;color:var(--ink);border-color:#fff}
 .hero-copy p{max-width:36ch;font-size:15px;color:var(--ink-2)}
 .hero-word{position:absolute;left:0;right:0;bottom:3vh;z-index:1;text-align:center;font-size:clamp(64px,17.5vw,300px);color:var(--ink);white-space:nowrap;pointer-events:none}
 .hero-word em{font-style:normal;color:transparent;-webkit-text-stroke:1.5px var(--ink)}
-.fab{position:absolute;left:57%;top:52%;width:min(80vw,1000px,calc(100vh*1.2));aspect-ratio:4/3;transform:translate(-50%,-50%);z-index:2;perspective:1400px}
+.fab{position:absolute;left:50%;top:52%;width:min(80vw,1000px,calc(100vh*1.2));aspect-ratio:4/3;transform:translate(-50%,-50%);z-index:2;perspective:1400px}
 .fab svg{width:100%;height:100%;overflow:visible;will-change:transform}
 .fab-hud{position:absolute;left:32px;bottom:34px;z-index:4;width:min(430px,40vw);opacity:0;transition:opacity .5s}
 .fab-hud.on{opacity:1}
@@ -104,7 +104,7 @@ header.dark .links .btn{background:#fff;color:var(--ink);border-color:#fff}
 .scroll-cue i::after{content:"";position:absolute;left:0;top:-40%;width:1px;height:40%;background:var(--ink);animation:cue 1.8s infinite}
 @keyframes cue{to{top:100%}}
 .dim{position:absolute;inset:0;background:var(--ink);opacity:0;z-index:5;pointer-events:none}
-@media(max-width:800px){.hero-copy .row{flex-direction:column}.scroll-cue{display:none}.fab{left:50%;top:42%;width:150vw}.fab-hud{left:20px;right:20px;bottom:22px;width:auto}.fab-name{font-size:30px;margin:6px 0 8px}.fab-desc{font-size:13.5px;min-height:4.4em}}
+@media(max-width:800px){.hero-copy .row{flex-direction:column}.scroll-cue{display:none}.fab{left:50%;top:50%;width:150vw}.fab-hud{left:20px;right:20px;bottom:22px;width:auto}.fab-name{font-size:30px;margin:6px 0 8px}.fab-desc{font-size:13.5px;min-height:4.4em}}
 /* ---------- BUILD (pinned dark) ---------- */
 #build{height:420vh;background:var(--ink);color:#fff}
 #build .stage{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:40px;padding:90px 32px 40px;max-width:1320px;margin:0 auto}
@@ -395,7 +395,6 @@ body.go .hero-copy .fadein{opacity:1;transform:none}
       </div>
     </div>
     <div class="fab" id="fab" aria-hidden="true"><svg viewBox="0 0 800 600" id="fabSvg"></svg></div>
-    <div class="fab-hud" id="fabHud" aria-live="polite"><span class="mono" id="fabNum">01 / 11 · Fabrication</span><h2 class="disp fab-name" id="fabName">Crystal growth</h2><p class="fab-desc" id="fabDesc"></p><div class="fab-ticks" id="fabTicks"></div></div>
     <div class="scroll-cue mono" id="scrollCue"><i></i>Scroll to make a chip</div>
     <div class="dim" id="dim"></div>
     <h1 class="hero-word disp" aria-label="Atmos Silicon Labs: learn chip design the way it's actually done"><span class="ch">R</span><span class="ch">T</span><span class="ch">L</span><em class="ch">→</em><span class="ch">G</span><span class="ch">D</span><span class="ch">S</span></h1>
@@ -738,7 +737,7 @@ const F={};const K=.42,CX=400,CY=350,R=230,S=34;
   // cross-section card (stage 6)
   F.xs=el('g',{opacity:0,transform:'translate(-303 -10)'},fsvg);
   el('rect',{x:618,y:40,width:170,height:170,rx:10,fill:'#fff',stroke:'#DCDDDF'},F.xs);
-  const tx=el('text',{x:632,y:62,'font-family':'IBM Plex Mono, monospace','font-size':10,'letter-spacing':'1.5',fill:'#73767F'},F.xs);tx.textContent='CROSS-SECTION';
+  
   el('rect',{x:632,y:170,width:142,height:26,fill:'#9aa1ad'},F.xs);
   F.xl=[['#3556C4',160,10],['#D2453B',144,16],['#C9CED8',132,12],['#E7B04A',116,16],['#C9CED8',102,14],['#E7B04A',86,16]].map(([c,y,h],i)=>{
     const pattern=i%2===1;const g=el('g',{opacity:0},F.xs);
@@ -766,11 +765,6 @@ const F={};const K=.42,CX=400,CY=350,R=230,S=34;
   fsvg.insertBefore(F.pickShadow,F.pick);
   [...F.cutLines,...F.wires].forEach(p=>{const L=p.getTotalLength?p.getTotalLength():600;p._L=L||600;p.style.strokeDasharray=p._L;p.style.strokeDashoffset=p._L});
 })();
-// HUD
-const fabHud=document.getElementById('fabHud'),fabNum=document.getElementById('fabNum'),fabName=document.getElementById('fabName'),fabDesc=document.getElementById('fabDesc'),fabTicks=document.getElementById('fabTicks');
-STAGES.forEach(()=>{const i=document.createElement('i');i.innerHTML='<b></b>';fabTicks.appendChild(i)});
-let curStage=-1,swapT=0;
-function setStage(i){if(i===curStage)return;curStage=i;fabHud.classList.add('swap');clearTimeout(swapT);swapT=setTimeout(()=>{if(curStage>=0){fabNum.textContent=String(curStage+1).padStart(2,'0')+' / '+STAGES.length+' · Fabrication';fabName.textContent=STAGES[curStage][0];fabDesc.textContent=STAGES[curStage][1]}fabHud.classList.remove('swap')},180)}
 const vis=(n,o)=>n.setAttribute('opacity',o.toFixed(3));
 function heroFrame(){
   const p=progressOf(hero);
@@ -780,8 +774,6 @@ function heroFrame(){
   const intro=1-seg(p,0,P0);
   fabBox.style.opacity=seg(p,P0*.25,P0*.9);
   heroWord.style.opacity=intro;heroWord.style.transform=`translateY(${(1-intro)*60}px)`;heroCopy.style.opacity=intro;document.getElementById('scrollCue').style.opacity=intro;
-  fabHud.classList.toggle('on',p>P0*.6&&p<.985);setStage(idx<0?0:idx);
-  [...fabTicks.children].forEach((t,i)=>t.firstChild.style.transform=`scaleX(${st(i)})`);
   const a=st(0),b=st(1),c=st(2),d=st(3),e=st(4),f=st(5),g=st(6),h=st(7),k=st(8),l=st(9),m=st(10);
   fabBox.style.transform=`translate(-50%,-50%) rotateX(${-PM.y*3}deg) rotateY(${PM.x*4}deg)`;
   // 1 crystal growth (visible during intro too, as a still crucible)
